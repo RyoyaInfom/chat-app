@@ -21,7 +21,13 @@ public interface  UserRepository {
   @Select("SELECT * FROM users WHERE id = #{id}")
   UserEntity findById(Integer id);
 
- @Update("UPDATE users SET name = #{name}, email = #{email} WHERE id = #{id}")
+  @Update("UPDATE users SET name = #{name}, email = #{email} WHERE id = #{id}")
   void update(UserEntity user);
+
+  @Select("SELECT EXISTS (SELECT 1 FROM users WHERE email = #{email})")
+  boolean existsByEmail(String email);
+
+  @Select("SELECT COUNT(*) > 0 FROM users WHERE email = #{email} and id != #{userId}")
+  boolean existsByEmailExcludeingCurrent(String email, Integer userId);
 }
 
