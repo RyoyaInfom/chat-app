@@ -5,7 +5,7 @@
   <div class="side-bar-header">
     
   <div class="username">
-      <a href="#">Tom</a>
+      <a th:href="@{/users/{userId}/edit(userId=${user.id})}" th:text="${user.name}">ユーザー名</a>
     </div>
 
     <div class="chat-make-button">

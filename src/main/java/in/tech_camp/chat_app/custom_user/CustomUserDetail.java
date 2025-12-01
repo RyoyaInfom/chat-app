@@ -22,6 +22,8 @@ public class CustomUserDetail implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
     }
+    
+    
 
     @Override
     public String getPassword() {
@@ -32,6 +34,11 @@ public class CustomUserDetail implements UserDetails{
     public String getUsername() {
         return user.getEmail();
     }
+
+    public Integer getId() {
+      return user.getId();
+  }
+
 
     @Override
     public boolean isAccountNonExpired() {
