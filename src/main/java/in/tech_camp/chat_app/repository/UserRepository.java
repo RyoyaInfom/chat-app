@@ -33,7 +33,7 @@ public interface  UserRepository {
   boolean existsByEmailExcludeingCurrent(String email, Integer userId);
 
   //自分以外の全ユーザーのデータを取得
-  @Select("SELECT * FROM users WHERE id <> #{excludedId}")
+ @Select("SELECT * FROM users WHERE id <> #{excludedId}")
   List<UserEntity> findAllExcept(Integer excludedId);
 }
 
