@@ -27,6 +27,7 @@ import in.tech_camp.chat_app.validation.ValidationOrder;
 import lombok.AllArgsConstructor;
 
 
+
 @Controller
 @AllArgsConstructor
 public class MessageController {
@@ -60,7 +61,9 @@ public class MessageController {
   }
 
   @PostMapping("/rooms/{roomId}/messages")
-  public String createMessage(@PathVariable("roomId") Integer roomId, @ModelAttribute("messageForm") @Validated(ValidationOrder.class) MessageForm messageForm, BindingResult bindingResult, @AuthenticationPrincipal CustomUserDetail currentUser) {
+  public String createMessage(@PathVariable("roomId") Integer roomId, 
+  @ModelAttribute("messageForm") @Validated(ValidationOrder.class) MessageForm messageForm, 
+  BindingResult bindingResult, @AuthenticationPrincipal CustomUserDetail currentUser) {
       
       if(bindingResult.hasErrors()){
         return "redirect:/rooms/" + roomId + "/messages";
@@ -83,6 +86,12 @@ public class MessageController {
       return "redirect:/rooms/" + roomId + "/messages";
   }
 
+  @PostMapping("/rooms/{roomId}/delete")
+  public String deleteRoom(@PathVariable("roomId") Integer roomId) {
+      messageRepository.deleteById(roomId);
+      return "redirect:/";
+  }
+  
 
   
 
