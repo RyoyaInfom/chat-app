@@ -7,4 +7,5 @@ public class RoomUserEntity {
   private Long id;
   private UserEntity user;
   private RoomEntity room;
+  
 }
