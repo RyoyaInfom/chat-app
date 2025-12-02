@@ -47,7 +47,11 @@ public class MessageController {
     
     model.addAttribute("messageForm", new MessageForm());
     model.addAttribute("roomId",roomId);
-      return "messages/index";
+
+    List<MessageEntity> messages= messageRepository.findByRoomId(roomId);
+    model.addAttribute("messages", messages);
+    
+    return "messages/index";
   }
 
   @PostMapping("/rooms/{roomId}/messages")
@@ -68,6 +72,8 @@ public class MessageController {
       }
       return "redirect:/rooms/" + roomId + "/messages";
   }
+
+
   
 
 
