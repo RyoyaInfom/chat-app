@@ -1,5 +1,11 @@
 package in.tech_camp.chat_app.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
+import in.tech_camp.chat_app.ImageUrl;
 import in.tech_camp.chat_app.custom_user.CustomUserDetail;
 import in.tech_camp.chat_app.entity.MessageEntity;
 import in.tech_camp.chat_app.entity.RoomEntity;
@@ -36,6 +44,7 @@ public class MessageController {
   private final RoomUserRepository roomUserRepository;
   private final RoomRepository roomRepository;
   private final MessageRepository messageRepository;
+  private final ImageUrl imageUrl;
 
 
   @GetMapping("/rooms/{roomId}/messages")
@@ -69,17 +78,31 @@ public class MessageController {
         return "redirect:/rooms/" + roomId + "/messages";
       }
 
-      MessageEntity messageEntity =new MessageEntity();
-      messageEntity.setContent(messageForm.getContent());
-      
-      UserEntity userEntity = userRepository.findById(currentUser.getId());
-      RoomEntity roomEntity = roomRepository.findById(roomId);
+      MessageEntity message =new MessageEntity();
+      message.setContent(messageForm.getContent());
 
-      messageEntity.setUser(userEntity);
-      messageEntity.setRoom(roomEntity);
+       MultipartFile imageFile = messageForm.getImage();
+    if (imageFile != null && !imageFile.isEmpty()) {
+      try {
+        String uploadDir = imageUrl.getImageUrl();
+        String fileName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "_" + imageFile.getOriginalFilename();
+        Path imagePath = Paths.get(uploadDir, fileName);
+        Files.copy(imageFile.getInputStream(), imagePath);
+        message.setImage("/uploads/" + fileName);
+      } catch (IOException e) {
+        System.out.println("エラー：" + e);
+        return "redirect:/rooms/" + roomId + "/messages";
+      }
+    }
+      
+      UserEntity user = userRepository.findById(currentUser.getId());
+      RoomEntity room = roomRepository.findById(roomId);
+
+      message.setUser(user);
+      message.setRoom(room);
 
       try {
-        messageRepository.insert(messageEntity);
+        messageRepository.insert(message);
       } catch (Exception e) {
         System.out.println("エラー:" + e);
       }
