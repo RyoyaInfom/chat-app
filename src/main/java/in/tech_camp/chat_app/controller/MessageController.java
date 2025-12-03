@@ -72,7 +72,7 @@ public class MessageController {
   @ModelAttribute("messageForm") MessageForm messageForm, 
   BindingResult bindingResult, @AuthenticationPrincipal CustomUserDetail currentUser) {
       
-      messageForm.ValidateMessage(bindingResult);
+      messageForm.validateMessage(bindingResult);
       if(bindingResult.hasErrors()){
         return "redirect:/rooms/" + roomId + "/messages";
       }
