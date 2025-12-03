@@ -3,8 +3,6 @@ package in.tech_camp.chat_app.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.naming.Binding;
-
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import in.tech_camp.chat_app.entity.UserEntity;
 import in.tech_camp.chat_app.form.LoginForm;
@@ -22,12 +22,6 @@ import in.tech_camp.chat_app.repository.UserRepository;
 import in.tech_camp.chat_app.service.UserService;
 import in.tech_camp.chat_app.validation.ValidationOrder;
 import lombok.AllArgsConstructor;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 
 
@@ -86,12 +80,12 @@ public class UserController {
       return "users/login";
   }
   
-  @GetMapping("/login")
-  public String showLoginWithError(@RequestParam(value = "error")String error, Model model) {
-      if(error != null){
-        model.addAttribute("loginError","invalid email or password.");
-      }
-      return("users/login");
+ @GetMapping("/login")
+  public String login(@RequestParam(value = "error", required = false) String error, @ModelAttribute("loginForm") LoginForm loginForm, Model model) {
+    if (error != null) {
+      model.addAttribute("loginError", "メールアドレスかパスワードが間違っています。");
+    }
+    return "users/login";
   }
   
   @GetMapping("/users/{userId}/edit")
