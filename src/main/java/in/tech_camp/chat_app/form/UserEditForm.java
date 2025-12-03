@@ -11,10 +11,10 @@ public class UserEditForm {
 
   private Integer id;
 
-  @NotBlank(message = "name is can't blank", groups = ValidationPriority1.class)
+  @NotBlank(message = "name can't be blank", groups = ValidationPriority1.class)
   private String name;
 
-  @NotBlank(message = "name is can't blank", groups = ValidationPriority1.class)
-  @Email(message = "email is can't blank", groups= ValidationPriority2.class)
+  @NotBlank(message = "email can't be blank", groups = ValidationPriority1.class)
+  @Email(message = "email should be valid", groups= ValidationPriority2.class)
   private String email;
 }
